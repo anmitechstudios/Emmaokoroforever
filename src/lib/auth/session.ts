@@ -9,13 +9,30 @@ import type { AdminUser } from "@/lib/db/types";
 const COOKIE = "memorial_admin";
 const WEEK = 60 * 60 * 24 * 7;
 
+export type SecretSource = "set" | "derived" | "development" | "missing";
+
+export function secretSource(): SecretSource {
+  if ((process.env.SESSION_SECRET?.trim().length ?? 0) >= 32) return "set";
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY) return "derived";
+  return process.env.NODE_ENV === "production" ? "missing" : "development";
+}
+
+/**
+ * The key that signs admin sessions and anonymises visitor addresses.
+ * SESSION_SECRET is preferred; without it, a key is derived from the Supabase
+ * secret (one-way, so it never reveals that key) rather than taking the site down.
+ */
 export function secret(): string {
-  const value = process.env.SESSION_SECRET;
-  if (value && value.length >= 32) return value;
-  if (process.env.NODE_ENV === "production") {
-    throw new Error("SESSION_SECRET must be set to a random string of at least 32 characters.");
+  switch (secretSource()) {
+    case "set":
+      return process.env.SESSION_SECRET!.trim();
+    case "derived":
+      return createHmac("sha256", process.env.SUPABASE_SERVICE_ROLE_KEY!).update("memorial:session-secret").digest("hex");
+    case "development":
+      return "development-only-secret-do-not-use-in-production";
+    case "missing":
+      throw new Error("Set SESSION_SECRET (at least 32 random characters) in the hosting environment.");
   }
-  return "development-only-secret-do-not-use-in-production";
 }
 
 function sign(payload: string): string {

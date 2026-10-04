@@ -41,7 +41,12 @@ export function ActionForm({
       for (const [name, value] of [...form.entries()]) {
         if (value instanceof File && value.size > 0 && value.type.startsWith("image/")) form.set(name, await downscale(value, 2400));
       }
-      return action(null, form);
+      try {
+        return await action(null, form);
+      } catch (error) {
+        console.error(error);
+        return { ok: false, message: "The server couldn't complete that. Please try again — if it keeps happening, check /api/health." };
+      }
     },
     (result, element) => {
       if (result?.ok && resetOnSuccess) element.reset();
