@@ -45,10 +45,11 @@ export default async function Privacy() {
           </p>
         </section>
         <section>
-          <h2>Before anything appears</h2>
+          <h2>What appears, and when</h2>
           <p>
-            Every submission is read by a member of the family before it is published. Visitors can report a published
-            tribute, and anything reported is reviewed again.
+            Tributes appear on the memorial as soon as they are sent. Memories and names added to candles are read by a
+            member of the family first. The family can remove anything, and visitors can report a tribute — one that is
+            reported several times is hidden until the family has looked at it again.
           </p>
         </section>
         <section>

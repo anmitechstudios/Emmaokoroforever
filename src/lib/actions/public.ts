@@ -19,8 +19,9 @@ import {
 } from "@/lib/validation";
 
 // Everything a visitor can do. Each action validates its input, checks for
-// automation, rate-limits by a hashed address, and stores the submission as
-// "pending" — nothing a visitor writes is public until the family approves it.
+// automation and rate-limits by a hashed address. Tributes are published at
+// once (the family can unpublish or delete them, and three reports hide one);
+// memories, guestbook entries and candle names wait for the family's approval.
 
 export type SubmitState<T = undefined> =
   | { ok: true; entry: T }
@@ -66,11 +67,11 @@ export async function submitTribute(_: SubmitState<PublicTribute>, form: FormDat
     ...draft,
     memorial_id: memorial.id,
     email: input.email,
-    status: "pending",
+    status: "approved",
     report_count: 0,
     ip_hash: ipHash,
   });
-  revalidatePath("/admin", "layout");
+  revalidatePath("/", "layout");
   return { ok: true, entry: draft };
 }
 

@@ -26,6 +26,9 @@ Font.register({
 });
 Font.registerHyphenationCallback((word) => [word]);
 
+// "The Years" is commented out on the website for now; keep the booklet in step.
+const SHOW_TIMELINE = false;
+
 const INK = "#24211d";
 const SOFT = "#4a453e";
 const MUTED = "#6e675d";
@@ -137,7 +140,7 @@ export async function GET() {
         </Page>
       )}
 
-      {on.timeline && timeline.length > 0 && (
+      {SHOW_TIMELINE && on.timeline && timeline.length > 0 && (
         <Page size="A4" style={s.page}>
           {footer}
           <Text style={s.eyebrow}>The Years</Text>

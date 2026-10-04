@@ -31,7 +31,7 @@ Everything on the public page is edited from `/admin`:
 | Service | Date, venue, map, schedule, dress code, livestream |
 | Settings | Theme, accent colour, which sections appear, share text, family contact, sign-in email and password |
 
-Nothing a visitor writes is public until it is approved. A tribute reported by three different visitors is hidden again until someone looks at it.
+Tributes are published as soon as they are sent; the family can unpublish or delete any of them, and a tribute reported by three different visitors is hidden until someone looks at it. Memories and candle names wait for approval.
 
 ## Going live on Vercel
 

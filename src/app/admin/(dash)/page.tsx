@@ -26,7 +26,7 @@ export default async function Overview() {
     ]);
 
   const queue = [
-    { href: "/admin/tributes?status=pending", label: "Tributes", count: tributesWaiting },
+    { href: "/admin/tributes?status=pending", label: "Reported tributes", count: tributesWaiting },
     { href: "/admin/memories?status=pending", label: "Memories", count: memoriesWaiting },
     { href: "/admin/guestbook?status=pending", label: "Guestbook entries", count: guestbookWaiting },
     { href: "/admin/candles?status=pending", label: "Candle names", count: candlesWaiting },
@@ -35,7 +35,7 @@ export default async function Overview() {
   const noPortrait = !memorial.hero_image_url;
 
   return (
-    <AdminPage title="Overview" intro="Everything visitors write waits here until you approve it.">
+    <AdminPage title="Overview" intro="Tributes go live straight away; memories and candle names wait here for your approval, along with any reported tributes.">
       {noPortrait && (
         <div className="rounded border border-[#b98a3c]/40 bg-[#b98a3c]/10 px-5 py-4 text-sm text-[#6a4c16]">
           <strong className="font-medium">There is no portrait yet.</strong> Add one under{" "}

@@ -7,7 +7,7 @@ function Wrapper({ label, name, hint, error, optional, children }: Common & { ch
     <div>
       <label htmlFor={name} className="field-label">
         {label}
-        {optional && <span className="ml-2 normal-case tracking-normal text-muted/80">optional</span>}
+        {optional && <span className="optional">(optional)</span>}
       </label>
       {children}
       {hint && !error && (

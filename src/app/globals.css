@@ -259,6 +259,16 @@
     resize: vertical;
     min-height: 8.5rem;
   }
+  /* The "(optional)" note beside a field label: soft red, lowercase. */
+  .optional {
+    margin-left: 0.5rem;
+    color: #a4483a;
+    text-transform: none;
+    letter-spacing: 0.02em;
+  }
+  [data-theme="evening"] .optional {
+    color: #e39a8c;
+  }
   .field-error {
     margin-top: 0.375rem;
     font-size: 0.8125rem;

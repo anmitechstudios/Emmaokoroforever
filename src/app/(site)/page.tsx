@@ -4,7 +4,7 @@ import { Family } from "@/components/site/Family";
 import { Favorites } from "@/components/site/Favorites";
 import { Closing, Footer } from "@/components/site/Footer";
 import { Gallery } from "@/components/site/Gallery";
-import { Guestbook } from "@/components/site/Guestbook";
+// import { Guestbook } from "@/components/site/Guestbook";
 import { Header, type NavLink } from "@/components/site/Header";
 import { Hero } from "@/components/site/Hero";
 // import { Media } from "@/components/site/Media";
@@ -12,7 +12,7 @@ import { MemoryWall } from "@/components/site/MemoryWall";
 import { SectionHeader } from "@/components/site/SectionHeader";
 import { Service } from "@/components/site/Service";
 import { Story } from "@/components/site/Story";
-import { Timeline } from "@/components/site/Timeline";
+// import { Timeline } from "@/components/site/Timeline";
 import { TributeButton } from "@/components/site/TributeDialog";
 import { Tributes } from "@/components/site/Tributes";
 import { Reveal } from "@/components/ui/motion";
@@ -38,21 +38,22 @@ export default async function Home() {
       nav: "Story",
       render: (number) => memorial.chapters.length > 0 && <Story memorial={memorial} number={number} />,
     },
-    {
-      key: "timeline",
-      nav: "Timeline",
-      render: (number) =>
-        data.timeline.length > 0 && (
-          <section id="timeline" className="section border-y border-line bg-surface" aria-label="Life timeline">
-            <div className="shell">
-              <SectionHeader number={number} eyebrow="The Years" title={<>A life in {accent("years")}</>} align="center" />
-              <div className="mx-auto max-w-5xl">
-                <Timeline events={data.timeline} />
-              </div>
-            </div>
-          </section>
-        ),
-    },
+    // "The Years" timeline — commented out for now. Restore this block and its import above to bring it back.
+    // {
+    //   key: "timeline",
+    //   nav: "Timeline",
+    //   render: (number) =>
+    //     data.timeline.length > 0 && (
+    //       <section id="timeline" className="section border-y border-line bg-surface" aria-label="Life timeline">
+    //         <div className="shell">
+    //           <SectionHeader number={number} eyebrow="The Years" title={<>A life in {accent("years")}</>} align="center" />
+    //           <div className="mx-auto max-w-5xl">
+    //             <Timeline events={data.timeline} />
+    //           </div>
+    //         </div>
+    //       </section>
+    //     ),
+    // },
     {
       key: "memories",
       render: (number) => (
@@ -134,7 +135,7 @@ export default async function Home() {
               title={<>Words of {accent("love")}</>}
               action={<TributeButton>Leave a Tribute</TributeButton>}
             >
-              <p>Share a memory, a message, a prayer, or words of comfort. Every tribute is read by the family.</p>
+              <p>Share a memory, a message, a prayer, or words of comfort.</p>
             </SectionHeader>
             <Tributes initial={data.tributes.tributes} total={data.tributes.total} />
           </div>
@@ -171,18 +172,19 @@ export default async function Home() {
       key: "candles",
       render: () => <Candle count={data.candles.count} names={data.candles.names} shortName={name} />,
     },
-    {
-      key: "guestbook",
-      nav: "Guestbook",
-      render: (number) => (
-        <section id="guestbook" className="section" aria-label="Guestbook">
-          <div className="shell">
-            <SectionHeader number={number} eyebrow="Guestbook" title={<>Sign the {accent("book")}</>} align="center" />
-            <Guestbook entries={data.guestbook} />
-          </div>
-        </section>
-      ),
-    },
+    // Guestbook — commented out for now. Restore this block and its import above to bring it back.
+    // {
+    //   key: "guestbook",
+    //   nav: "Guestbook",
+    //   render: (number) => (
+    //     <section id="guestbook" className="section" aria-label="Guestbook">
+    //       <div className="shell">
+    //         <SectionHeader number={number} eyebrow="Guestbook" title={<>Sign the {accent("book")}</>} align="center" />
+    //         <Guestbook entries={data.guestbook} />
+    //       </div>
+    //     </section>
+    //   ),
+    // },
   ];
 
   let count = 0;

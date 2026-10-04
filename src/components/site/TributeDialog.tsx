@@ -79,7 +79,6 @@ function TributeForm({ initialMode, shortName, onClose }: { initialMode: Tribute
   const [mode, setMode] = useState(initialMode);
   const [length, setLength] = useState(0);
   const [photo, setPhoto] = useState<{ name: string; preview: string } | null>(null);
-  const [mine, setMine] = useMyTributes();
   const openedAt = useRef(0);
   const fileInput = useRef<HTMLInputElement>(null);
   const copy = COPY[mode];
@@ -109,7 +108,6 @@ function TributeForm({ initialMode, shortName, onClose }: { initialMode: Tribute
       }
     },
     (result) => {
-      if (result?.ok && result.entry) setMine([result.entry, ...mine.filter((t) => t.id !== result.entry!.id)].slice(0, 5));
       // Take keyboard and screen-reader users straight to the first problem.
       if (result && !result.ok) requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus());
     },
@@ -125,8 +123,9 @@ function TributeForm({ initialMode, shortName, onClose }: { initialMode: Tribute
           Thank you.
         </h2>
         <p className="mx-auto mt-5 max-w-sm text-ink-soft">
-          Your {mode === "memory" ? "memory" : "words"} have been received. The family reads every message, and yours will
-          appear here once they have.
+          {mode === "memory"
+            ? "Your memory has been received. The family reads every memory, and yours will appear on the wall once they have."
+            : "Your tribute has been added to the memorial."}
         </p>
         <button type="button" className="btn btn-outline mt-10" onClick={onClose}>
           Close
@@ -208,7 +207,7 @@ function TributeForm({ initialMode, shortName, onClose }: { initialMode: Tribute
         {mode === "tribute" && (
           <div>
             <span className="field-label">
-              Photo<span className="ml-2 normal-case tracking-normal text-muted/80">optional</span>
+              Photo<span className="optional">(optional)</span>
             </span>
             <input
               ref={fileInput}
@@ -268,7 +267,9 @@ function TributeForm({ initialMode, shortName, onClose }: { initialMode: Tribute
 
       <div className="mt-10 flex flex-col-reverse items-start gap-5 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-[19rem] text-[0.8125rem] leading-snug text-muted">
-          Every message is read by the family before it appears.
+          {mode === "memory"
+            ? "Memories are read by the family before they appear."
+            : "Your tribute will appear on the memorial straight away."}
         </p>
         <button type="submit" className="btn btn-primary w-full sm:w-auto" disabled={pending}>
           {pending ? "Sending…" : copy.submit}
