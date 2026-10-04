@@ -34,7 +34,8 @@ export function Story({ memorial, number }: { memorial: Memorial; number: string
                           alt={chapter.image_caption || chapter.title}
                           fill
                           sizes="(min-width: 1024px) 36vw, 92vw"
-                          className="object-cover"
+                          // Anchor to the top: in photographs of people, faces sit high in the frame.
+                          className="object-cover object-top"
                         />
                       </RevealImage>
                       {chapter.image_caption && (
