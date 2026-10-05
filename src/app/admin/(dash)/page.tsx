@@ -39,7 +39,7 @@ export default async function Overview() {
       {noPortrait && (
         <div className="rounded border border-[#b98a3c]/40 bg-[#b98a3c]/10 px-5 py-4 text-sm text-[#6a4c16]">
           <strong className="font-medium">There is no portrait yet.</strong> Add one under{" "}
-          <Link href="/admin/memorial" className="underline underline-offset-4">Name &amp; portrait</Link> — it is the first thing visitors see.
+          <Link href="/admin/memorial" className="underline underline-offset-4">Name &amp; portrait</Link>. It is the first thing visitors see.
         </div>
       )}
 
@@ -87,7 +87,7 @@ export default async function Overview() {
 
       <p className="flex items-center gap-2 text-xs text-muted">
         <Icon name="check" size={14} />
-        {usingSupabase ? "Connected to Supabase." : "Using the local file store (.data/). Connect Supabase before going live — see README."}
+        {usingSupabase ? "Connected to Supabase." : "Using the local file store (.data/). Connect Supabase before going live (see README)."}
       </p>
     </AdminPage>
   );

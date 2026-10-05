@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GALLERY_CATEGORIES, type GalleryImage } from "@/lib/db/types";
@@ -9,7 +10,11 @@ import { EASE } from "@/components/ui/motion";
 
 const ALL = "All";
 
-export function Gallery({ images }: { images: GalleryImage[] }) {
+/**
+ * The photograph album. With `preview`, only the first few photographs are
+ * shown, fading out into a link to the full gallery page.
+ */
+export function Gallery({ images, preview }: { images: GalleryImage[]; preview?: number }) {
   const [category, setCategory] = useState(ALL);
   const [active, setActive] = useState<number | null>(null);
   const [selecting, setSelecting] = useState(false);
@@ -22,7 +27,10 @@ export function Gallery({ images }: { images: GalleryImage[] }) {
     return [ALL, ...known, ...custom];
   }, [images]);
 
-  const shown = useMemo(() => (category === ALL ? images : images.filter((i) => i.category === category)), [images, category]);
+  const shown = useMemo(() => {
+    if (preview) return images.slice(0, preview);
+    return category === ALL ? images : images.filter((i) => i.category === category);
+  }, [images, category, preview]);
 
   const toggle = (id: string) =>
     setSelected((current) => {
@@ -33,6 +41,7 @@ export function Gallery({ images }: { images: GalleryImage[] }) {
 
   return (
     <>
+      {!preview && (
       <div className="no-print mt-12 flex flex-wrap items-center justify-between gap-x-8 gap-y-5 lg:mt-16">
         {categories.length > 2 ? (
           <div className="-mx-1 flex flex-wrap gap-1" role="group" aria-label="Filter photographs">
@@ -74,7 +83,9 @@ export function Gallery({ images }: { images: GalleryImage[] }) {
           </button>
         </div>
       </div>
+      )}
 
+      <div className={preview ? "relative max-h-[40rem] overflow-hidden sm:max-h-[46rem] lg:max-h-[52rem]" : undefined}>
       <motion.ul
         key={category}
         data-reveal
@@ -139,6 +150,15 @@ export function Gallery({ images }: { images: GalleryImage[] }) {
           );
         })}
       </motion.ul>
+      {preview && (
+        <div className="no-print pointer-events-none absolute inset-x-0 bottom-0 flex h-72 items-end justify-center bg-gradient-to-t from-paper via-paper/85 to-transparent pb-2">
+          <Link href="/gallery" className="btn btn-primary pointer-events-auto">
+            View all {images.length} photographs
+            <Icon name="arrow-right" size={16} />
+          </Link>
+        </div>
+      )}
+      </div>
 
       <Lightbox images={shown} index={active} onChange={setActive} />
     </>

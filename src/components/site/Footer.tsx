@@ -9,7 +9,7 @@ import { TributeButton } from "./TributeDialog";
 export function shareCopy(memorial: Memorial) {
   return {
     url: siteUrl(),
-    title: memorial.settings.share_title || `${memorial.epitaph} — ${memorial.full_name}`,
+    title: memorial.settings.share_title || `${memorial.epitaph} · ${memorial.full_name}`,
     text:
       memorial.settings.share_description ||
       `${memorial.epitaph}: ${memorial.full_name}, ${lifespan(memorial.born_on, memorial.died_on)}. Read the story, see the photographs and leave a tribute.`,
@@ -34,7 +34,7 @@ export function Closing({ memorial }: { memorial: Memorial }) {
         )}
         {memorial.closing_message && (
           <Reveal delay={0.2}>
-            <p className="eyebrow mt-8">— {memorial.settings.contact_name || "The family"}</p>
+            <p className="eyebrow mt-8">{memorial.settings.contact_name || "The family"}</p>
           </Reveal>
         )}
 
@@ -90,6 +90,7 @@ export function Footer({ memorial }: { memorial: Memorial }) {
             Family sign-in
           </Link>
         </p>
+        <p className="mt-3 text-xs text-muted">Site by Michael Osayame-Ebohon</p>
       </div>
     </footer>
   );

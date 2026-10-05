@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: "Life story" };
 export default async function StoryPage() {
   const memorial = await getMemorial();
   return (
-    <AdminPage title="Life story" intro="Tell the story in chapters — early life, family, work, faith, later years. Each chapter can have a photograph and a highlighted quote.">
+    <AdminPage title="Life story" intro="Tell the story in chapters: early life, family, work, faith, later years. Each chapter can have a photograph and a highlighted quote.">
       <ActionForm action={saveChapters} submit="Save story">
         <Repeater
           name="chapters"
@@ -18,7 +18,7 @@ export default async function StoryPage() {
           addLabel="Add a chapter"
           initial={memorial.chapters as never}
           fields={[
-            { key: "kicker", label: "Period or theme", placeholder: "1958 — 1976 · Early life" },
+            { key: "kicker", label: "Period or theme", placeholder: "1967 to 1985 · Early life" },
             { key: "title", label: "Chapter title", placeholder: "A child of Yaba" },
             { key: "body", label: "The story", type: "textarea", rows: 8, hint: "Leave a blank line between paragraphs." },
             { key: "pull_quote", label: "Highlighted quote (optional)", wide: true, placeholder: "Something they said, or something said of them" },

@@ -27,7 +27,7 @@ export function year(iso: string): string {
 }
 
 export function lifespan(born: string, died: string): string {
-  return `${year(born)} — ${year(died)}`;
+  return `${year(born)} – ${year(died)}`;
 }
 
 export function age(born: string, died: string): number {

@@ -7,7 +7,7 @@ import { seed } from "./seed";
 export const usingSupabase = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 if (process.env.VERCEL && !usingSupabase) {
-  throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set on Vercel — its file system is read-only.");
+  throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set on Vercel. Its file system is read-only.");
 }
 
 const driver: Driver = usingSupabase ? supabaseDriver : localDriver;

@@ -84,7 +84,7 @@ export async function GET() {
   );
 
   const document = (
-    <Document title={`${memorial.epitaph} — ${memorial.full_name}`} author={memorial.settings.contact_name || memorial.full_name} language="en">
+    <Document title={`${memorial.epitaph} · ${memorial.full_name}`} author={memorial.settings.contact_name || memorial.full_name} language="en">
       <Page size="A4" style={s.cover}>
         <Text style={s.eyebrow}>{memorial.epitaph}</Text>
         {portrait && (
@@ -99,7 +99,7 @@ export async function GET() {
         </Text>
         <Text style={{ fontSize: 46, fontStyle: "italic", lineHeight: 1.05, color: accent, textAlign: "center" }}>{words[words.length - 1]}</Text>
         <Text style={[s.eyebrow, { marginTop: 24, fontSize: 8, color: SOFT }]}>
-          {longDate(memorial.born_on)}  —  {longDate(memorial.died_on)}
+          {longDate(memorial.born_on)}  –  {longDate(memorial.died_on)}
         </Text>
         {memorial.quote ? (
           <View style={{ marginTop: 40, alignItems: "center" }}>
@@ -232,7 +232,7 @@ export async function GET() {
         {memorial.closing_message ? (
           <Text style={{ fontSize: 19, fontWeight: 300, textAlign: "center", lineHeight: 1.35, maxWidth: 360, marginTop: 28 }}>{memorial.closing_message}</Text>
         ) : null}
-        {memorial.closing_message ? <Text style={[s.eyebrow, { marginTop: 22 }]}>— {memorial.settings.contact_name || "The family"}</Text> : null}
+        {memorial.closing_message ? <Text style={[s.eyebrow, { marginTop: 22 }]}>{memorial.settings.contact_name || "The family"}</Text> : null}
         <Text style={[s.eyebrow, { marginTop: 90 }]}>Forever Remembered</Text>
         <Text style={{ fontSize: 26, fontWeight: 300, marginTop: 10 }}>{memorial.full_name}</Text>
         <Text style={{ fontSize: 13, fontStyle: "italic", textAlign: "center", color: SOFT, marginTop: 16, lineHeight: 1.4 }}>

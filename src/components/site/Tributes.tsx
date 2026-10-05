@@ -33,13 +33,21 @@ export function Tributes({ initial, total: initialTotal }: { initial: PublicTrib
   const [reporting, setReporting] = useState<PublicTribute | null>(null);
   const untouched = useRef(true);
   const request = useRef(0);
+  const track = useRef<HTMLDivElement>(null);
+  const [edges, setEdges] = useState({ start: true, end: true });
+  const [position, setPosition] = useState(1);
 
   // Fresh data from the server (after a revalidation) replaces the first page.
   useEffect(() => {
     if (untouched.current) {
       setItems(initial);
       setTotal(initialTotal);
+    } else if (!query && sort === "newest") {
+      setItems((current) => [...initial.filter((t) => !current.some((c) => c.id === t.id)), ...current]);
+      setTotal((current) => Math.max(current, initialTotal));
     }
+    // Only when the server sends a new first page.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initial, initialTotal]);
 
   async function load(offset: number, q: string, order: Sort) {
@@ -53,6 +61,7 @@ export function Tributes({ initial, total: initialTotal }: { initial: PublicTrib
       if (id !== request.current) return;
       setItems((current) => (offset === 0 ? data.tributes : [...current, ...data.tributes.filter((t) => !current.some((c) => c.id === t.id))]));
       setTotal(data.total);
+      if (offset === 0) track.current?.scrollTo({ left: 0 });
     } catch {
       if (id === request.current) setFailed(true);
     } finally {
@@ -92,7 +101,40 @@ export function Tributes({ initial, total: initialTotal }: { initial: PublicTrib
 
   const waiting = query ? [] : mine.filter((t) => !items.some((i) => i.id === t.id));
   const cards = [...waiting.map((t) => ({ tribute: t, pending: true })), ...items.map((t) => ({ tribute: t, pending: false }))];
-  const columns = [cards.filter((_, i) => i % 2 === 0), cards.filter((_, i) => i % 2 === 1)];
+
+  // ── Carousel ──────────────────────────────────────────────────────────
+  const stride = () => {
+    const el = track.current;
+    const card = el?.firstElementChild as HTMLElement | null;
+    return el && card ? card.offsetWidth + (parseFloat(getComputedStyle(el).columnGap) || 0) : 0;
+  };
+
+  function measure() {
+    const el = track.current;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    setEdges({ start: el.scrollLeft < 8, end: el.scrollLeft > max - 8 });
+    const width = stride();
+    if (width) setPosition(Math.min(cards.length, Math.round(el.scrollLeft / width) + 1));
+    // Fetch the next page as the visitor nears the end.
+    if (max > 0 && max - el.scrollLeft < el.clientWidth && items.length < total && !loading) {
+      untouched.current = false;
+      load(items.length, query, sort);
+    }
+  }
+
+  function slide(by: number) {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    track.current?.scrollBy({ left: by * stride(), behavior: reduce ? "auto" : "smooth" });
+  }
+
+  useEffect(() => {
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+    // Re-measure whenever the set of cards changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cards.length]);
 
   return (
     <>
@@ -140,45 +182,69 @@ export function Tributes({ initial, total: initialTotal }: { initial: PublicTrib
           {query ? `No tributes mention “${query}”.` : "Be the first to leave a tribute."}
         </p>
       ) : (
-        <div className={`mt-10 flex flex-col gap-6 transition-opacity duration-500 md:grid md:grid-cols-2 md:items-start lg:gap-8 ${loading ? "opacity-60" : ""}`}>
-          {columns.map((column, c) => (
-            <div key={c} className="contents md:flex md:flex-col md:gap-6 lg:gap-8">
-              {column.map(({ tribute, pending }, i) => (
+        <Reveal className="mt-10">
+          <div
+            ref={track}
+            onScroll={measure}
+            // `relative` (below) contains the cards' visually hidden text, so off-screen cards cannot widen the page.
+            tabIndex={0}
+            role="region"
+            aria-roledescription="carousel"
+            aria-label={`Tributes, ${total} in all. Scroll sideways or use the arrow buttons.`}
+            className={`scrollbar-none relative -mx-[clamp(1.25rem,5vw,4.5rem)] flex snap-x snap-mandatory scroll-px-[clamp(1.25rem,5vw,4.5rem)] gap-5 overflow-x-auto px-[clamp(1.25rem,5vw,4.5rem)] pb-2 transition-opacity duration-500 lg:gap-7 ${
+              loading ? "opacity-70" : ""
+            }`}
+          >
+            {cards.map(({ tribute, pending }) => (
+              <div
+                key={tribute.id}
+                className="flex shrink-0 basis-[86%] snap-start sm:basis-[calc((100%-1.25rem)/2)] lg:basis-[calc((100%-3.5rem)/3)]"
+              >
                 <TributeCard
-                  key={tribute.id}
                   tribute={tribute}
                   pending={pending}
-                  order={i * 2 + c}
                   hearted={hearts.includes(tribute.id)}
                   onHeart={() => heart(tribute)}
                   onReport={() => setReporting(tribute)}
                 />
-              ))}
+              </div>
+            ))}
+          </div>
+
+          {!(edges.start && edges.end) && (
+            <div className="no-print mt-8 flex items-center justify-between">
+              <p className="text-xs tabular-nums tracking-[0.2em] text-muted" aria-hidden="true">
+                {String(position).padStart(2, "0")} <span className="mx-1 opacity-50">/</span> {String(Math.max(total, cards.length)).padStart(2, "0")}
+              </p>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => slide(-1)}
+                  disabled={edges.start}
+                  aria-label="Previous tributes"
+                  className="grid size-12 place-items-center rounded-full border border-ink/25 transition-colors duration-500 hover:border-ink hover:bg-ink hover:text-paper disabled:pointer-events-none disabled:opacity-30"
+                >
+                  <Icon name="arrow-left" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => slide(1)}
+                  disabled={edges.end}
+                  aria-label="More tributes"
+                  className="grid size-12 place-items-center rounded-full border border-ink/25 transition-colors duration-500 hover:border-ink hover:bg-ink hover:text-paper disabled:pointer-events-none disabled:opacity-30"
+                >
+                  <Icon name="arrow-right" />
+                </button>
+              </div>
             </div>
-          ))}
-        </div>
+          )}
+        </Reveal>
       )}
 
       {failed && (
         <p role="alert" className="mt-8 text-center text-sm text-muted">
           We couldn't load the tributes just now. Please try again.
         </p>
-      )}
-
-      {items.length < total && (
-        <div className="no-print mt-14 text-center">
-          <button
-            type="button"
-            className="btn btn-outline"
-            disabled={loading}
-            onClick={() => {
-              untouched.current = false;
-              load(items.length, query, sort);
-            }}
-          >
-            {loading ? "Loading…" : `Read more tributes (${total - items.length})`}
-          </button>
-        </div>
       )}
 
       <ReportDialog tribute={reporting} onClose={() => setReporting(null)} />
@@ -189,19 +255,17 @@ export function Tributes({ initial, total: initialTotal }: { initial: PublicTrib
 function TributeCard({
   tribute,
   pending,
-  order,
   hearted,
   onHeart,
   onReport,
 }: {
   tribute: PublicTribute;
   pending: boolean;
-  order: number;
   hearted: boolean;
   onHeart: () => void;
   onReport: () => void;
 }) {
-  const long = tribute.message.length > 420;
+  const long = tribute.message.length > 240;
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -222,8 +286,7 @@ function TributeCard({
   }
 
   return (
-    <div style={{ order }}>
-    <Reveal as="article" className="card p-7 sm:p-9" y={20}>
+    <article className="card flex w-full flex-col p-7 sm:p-8">
       {pending && (
         <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-line px-3 py-1.5 text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
           <Icon name="clock" size={13} />
@@ -238,16 +301,17 @@ function TributeCard({
       <span className="block h-7 font-serif text-6xl leading-none text-accent" aria-hidden="true">
         “
       </span>
-      <blockquote className="mt-3 whitespace-pre-line font-serif text-[1.3125rem] leading-[1.5] sm:text-[1.4375rem]">
-        {long && !expanded ? `${tribute.message.slice(0, 380).replace(/\s+\S*$/, "")}…` : tribute.message}
+      <blockquote className="mt-3 whitespace-pre-line font-serif text-[1.25rem] leading-[1.5] sm:text-[1.3125rem]">
+        {long && !expanded ? `${tribute.message.slice(0, 210).replace(/\s+\S*$/, "")}…` : tribute.message}
       </blockquote>
       {long && (
-        <button type="button" className="link-line no-print mt-4" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>
+        <button type="button" className="link-line no-print mt-4 self-start" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>
           {expanded ? "Show less" : "Read in full"}
         </button>
       )}
 
-      <footer className="mt-8 flex items-end justify-between gap-4 border-t border-line pt-5">
+      <div className="mt-auto pt-8">
+      <footer className="border-t border-line pt-5">
         <div className="min-w-0">
           <p className="font-medium leading-snug">{tribute.name}</p>
           <p className="mt-0.5 text-[0.8125rem] text-muted">
@@ -257,7 +321,7 @@ function TributeCard({
         </div>
 
         {!pending && (
-          <div className="no-print -mr-2 flex shrink-0 items-center text-muted">
+          <div className="no-print -ml-2.5 mt-2 flex items-center text-muted">
             <button
               type="button"
               onClick={onHeart}
@@ -290,8 +354,8 @@ function TributeCard({
           </div>
         )}
       </footer>
-    </Reveal>
-    </div>
+      </div>
+    </article>
   );
 }
 

@@ -83,6 +83,12 @@ export async function getTribute(id: string): Promise<PublicTribute | null> {
   return publicTribute(tribute);
 }
 
+export async function getGallery() {
+  const memorial = await getMemorial();
+  const images = await (await db()).list("gallery_images", { where: { memorial_id: memorial.id }, order: [{ column: "sort_order" }] });
+  return { memorial, images };
+}
+
 export async function getHome() {
   const memorial = await getMemorial();
   const store = await db();

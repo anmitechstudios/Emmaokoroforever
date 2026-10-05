@@ -4,7 +4,7 @@ import { fontVariables } from "@/app/fonts";
 import "@/app/globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "Memorial dashboard", template: "%s — Memorial dashboard" },
+  title: { default: "Memorial dashboard", template: "%s · Memorial dashboard" },
   robots: { index: false, follow: false },
 };
 

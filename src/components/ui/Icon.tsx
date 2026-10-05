@@ -10,6 +10,7 @@ const PATHS = {
   "arrow-right": "M4 12h16m-6-6 6 6-6 6",
   "arrow-left": "M20 12H4m6-6-6 6 6 6",
   "arrow-down": "M12 4v16m-6-6 6 6 6-6",
+  "arrow-up": "M12 20V4m-6 6 6-6 6 6",
   "arrow-up-right": "M7 17 17 7M8 7h9v9",
   play: "M8 5.5v13l11-6.5-11-6.5Z",
   pause: "M8 5v14M16 5v14",

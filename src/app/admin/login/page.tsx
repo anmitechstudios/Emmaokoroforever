@@ -35,7 +35,7 @@ export default async function Login() {
         ) : (
           <p className="card mt-8 p-5 text-sm text-ink-soft">
             No administrator has been set up yet. Add <code>ADMIN_EMAIL</code> and <code>ADMIN_PASSWORD</code> to the
-            site's environment settings and restart it — the account is created automatically.
+            site's environment settings and restart it. The account is created automatically.
           </p>
         )}
 

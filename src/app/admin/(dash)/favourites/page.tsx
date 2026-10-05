@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: "Favourite things" };
 export default async function FavouritesPage() {
   const memorial = await getMemorial();
   return (
-    <AdminPage title="Favourite things" intro="A song, a book, a meal, a place, a saying — the small loves that made up a personality.">
+    <AdminPage title="Favourite things" intro="A song, a book, a meal, a place, a saying: the small loves that made up a personality.">
       <ActionForm action={saveFavorites}>
         <Repeater
           name="favorites"

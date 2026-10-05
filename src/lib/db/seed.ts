@@ -18,7 +18,7 @@ const MEMORIAL_ID = sid("memorial");
 const NOW = new Date().toISOString();
 
 const STORY_INTRO =
-  "Engineer, entrepreneur and a man with a deep love for God, Emma was husband to Ugochi and father to three amazing children — Chikezirim, Goziechukwu and Ivuomachukwu.";
+  "Engineer, entrepreneur and a man with a deep love for God, Emma was husband to Ugochi and father to three amazing children: Chikezirim, Goziechukwu and Ivuomachukwu.";
 
 const CHAPTERS = [
   {
@@ -40,7 +40,7 @@ const CHAPTERS = [
     kicker: "Port Harcourt",
     title: "Enterprise, and Ugochi",
     body:
-      "After graduation, Emma found pleasure in Lagos and Port Harcourt, venturing into private enterprise to make his way in life.\n\nIt was in Port Harcourt, at the very popular St. Matthew's Anglican Church, that he met his unassuming, calm and beautiful wife, Ugochi — and it was there that they were eventually wedded.",
+      "After graduation, Emma found pleasure in Lagos and Port Harcourt, venturing into private enterprise to make his way in life.\n\nIt was in Port Harcourt, at the very popular St. Matthew's Anglican Church, that he met his unassuming, calm and beautiful wife, Ugochi, and it was there that they were eventually wedded.",
   },
   {
     key: "family",

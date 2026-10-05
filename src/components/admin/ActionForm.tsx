@@ -45,7 +45,7 @@ export function ActionForm({
         return await action(null, form);
       } catch (error) {
         console.error(error);
-        return { ok: false, message: "The server couldn't complete that. Please try again — if it keeps happening, check /api/health." };
+        return { ok: false, message: "The server couldn't complete that. Please try again. If it keeps happening, check /api/health." };
       }
     },
     (result, element) => {

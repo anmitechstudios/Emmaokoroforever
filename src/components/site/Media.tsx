@@ -71,7 +71,7 @@ function VideoCard({ item }: { item: MediaItem }) {
             disabled={!available}
             onClick={() => setPlaying(true)}
             className="group absolute inset-0 block w-full disabled:cursor-default"
-            aria-label={available ? `Play video: ${item.title}` : `${item.title} — not yet available`}
+            aria-label={available ? `Play video: ${item.title}` : `${item.title}, not yet available`}
           >
             {item.poster_url && (
               <Image

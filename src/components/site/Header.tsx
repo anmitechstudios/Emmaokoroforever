@@ -34,7 +34,7 @@ export function Header({ name, links }: { name: string; links: NavLink[] }) {
       }`}
     >
       <div className="shell flex h-16 items-center justify-between gap-6 lg:h-20">
-        <Link href="/" className="font-serif text-xl tracking-wide lg:text-[1.375rem]" aria-label={`${name} — memorial home`}>
+        <Link href="/" className="font-serif text-xl tracking-wide lg:text-[1.375rem]" aria-label={`${name}, memorial home`}>
           {name}
         </Link>
 

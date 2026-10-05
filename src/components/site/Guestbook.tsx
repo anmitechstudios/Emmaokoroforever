@@ -52,7 +52,7 @@ export function Guestbook({ entries }: { entries: PublicGuestbookEntry[] }) {
               <p className="eyebrow">Signed</p>
               <p className="mt-6 font-hand text-[1.75rem] leading-[2.5rem]">{signed.message}</p>
               <p className="mt-2 text-[0.8125rem] text-muted">
-                — {signed.name}
+                {signed.name}
                 {signed.location && `, ${signed.location}`}
               </p>
               <p className="mt-8 border-t border-line pt-6 text-[0.9375rem] text-ink-soft">
@@ -62,7 +62,7 @@ export function Guestbook({ entries }: { entries: PublicGuestbookEntry[] }) {
           ) : (
             <form onSubmit={onSubmit} className="relative" noValidate>
               <h3 className="font-serif text-3xl">Sign the book</h3>
-              <p className="mt-2 text-[0.9375rem] text-muted">Your name and a line or two — as you would at the door.</p>
+              <p className="mt-2 text-[0.9375rem] text-muted">Your name and a line or two, as you would at the door.</p>
               <div className="mt-8 grid gap-6">
                 <div className="grid gap-6 sm:grid-cols-2">
                   <Field label="Name" name="name" required maxLength={80} autoComplete="name" error={errors.name} />
@@ -93,7 +93,7 @@ export function Guestbook({ entries }: { entries: PublicGuestbookEntry[] }) {
                 <li key={entry.id} className="pb-[2.5rem]">
                   <p className="font-hand text-[1.625rem] leading-[2.5rem] text-ink">{entry.message}</p>
                   <p className="text-[0.8125rem] leading-[2.5rem] text-muted">
-                    — <span className="text-ink-soft">{entry.name}</span>
+                    <span className="text-ink-soft">{entry.name}</span>
                     {entry.location && `, ${entry.location}`}
                   </p>
                 </li>

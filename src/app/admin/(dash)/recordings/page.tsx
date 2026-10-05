@@ -46,7 +46,7 @@ function Fields({ item, order }: { item?: MediaItem; order: number }) {
         <label htmlFor={`file-${key}`} className="field-label">…or upload a file</label>
         <input id={`file-${key}`} name="file" type="file" accept="audio/mpeg,audio/mp4,audio/x-m4a,audio/wav,audio/ogg,video/mp4,video/webm" className={FILE} />
         <p className="mt-1 text-xs text-muted">
-          MP3, M4A, WAV, MP4 or WebM, up to 4 MB — ideal for voice notes and short clips.
+          MP3, M4A, WAV, MP4 or WebM, up to 4 MB. Ideal for voice notes and short clips.
           {uploaded && " A file is already uploaded; choosing another replaces it."}
         </p>
       </div>
@@ -75,7 +75,7 @@ export default async function RecordingsPage() {
       </Panel>
 
       {items.map((item) => (
-        <Panel key={item.id} title={item.title} hint={item.url ? (item.kind === "audio" ? "Audio" : "Video") : "No recording attached yet — shown as “Coming soon”."}>
+        <Panel key={item.id} title={item.title} hint={item.url ? (item.kind === "audio" ? "Audio" : "Video") : "No recording attached yet. Shown as “Coming soon”."}>
           <ActionForm action={saveMediaItem} submit="Save" secondary={<DeleteButton action={deleteRow.bind(null, "media", item.id)} />}>
             <Fields item={item} order={next} />
           </ActionForm>

@@ -53,7 +53,7 @@ async function put(name: string, body: Buffer, contentType: string): Promise<str
  * (including GPS location) is dropped, and oversized photos are scaled down.
  */
 export async function saveImage(file: File, maxEdge = 2400): Promise<{ url: string; width: number; height: number }> {
-  if (file.size > MAX_IMAGE_BYTES) throw new UploadError("That photo is too large — please choose one under 10 MB.");
+  if (file.size > MAX_IMAGE_BYTES) throw new UploadError("That photo is too large. Please choose one under 10 MB.");
   let output: { data: Buffer; info: OutputInfo };
   try {
     output = await sharp(Buffer.from(await file.arrayBuffer()), { limitInputPixels: 80_000_000 })

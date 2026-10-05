@@ -81,7 +81,7 @@ export default async function SettingsPage() {
                 <input type="color" name="accent_custom" defaultValue={s.accent} className="h-8 w-10 cursor-pointer rounded border border-line bg-transparent" aria-label="Custom accent colour" />
               </label>
             </div>
-            <p className="mt-2 text-xs text-muted">Muted colours work best. The accent is used sparingly — for the family name, years and small details.</p>
+            <p className="mt-2 text-xs text-muted">Muted colours work best. The accent is used sparingly, for the family name, years and small details.</p>
           </fieldset>
         </Panel>
 
@@ -98,7 +98,7 @@ export default async function SettingsPage() {
 
         <Panel title="When the memorial is shared" hint={`How the link appears on WhatsApp, Facebook and X. The preview image is made automatically from the portrait, name and dates. Current address: ${siteUrl()}`}>
           <div className="grid gap-4">
-            <Input label="Title" name="share_title" defaultValue={s.share_title} maxLength={120} placeholder={`${memorial.epitaph} — ${memorial.full_name}`} hint="Leave empty to use the name automatically." />
+            <Input label="Title" name="share_title" defaultValue={s.share_title} maxLength={120} placeholder={`${memorial.epitaph} · ${memorial.full_name}`} hint="Leave empty to use the name automatically." />
             <Area label="Short description" name="share_description" defaultValue={s.share_description} maxLength={300} rows={2} />
           </div>
         </Panel>

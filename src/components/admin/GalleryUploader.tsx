@@ -52,7 +52,7 @@ export function GalleryUploader() {
           <input ref={input} type="file" accept="image/jpeg,image/png,image/webp" multiple className="sr-only" disabled={progress !== null} onChange={(e) => upload(e.target.files)} />
         </label>
       </div>
-      <p className="mt-3 text-sm text-muted">JPG or PNG. Choose as many as you like — captions and dates can be added afterwards.</p>
+      <p className="mt-3 text-sm text-muted">JPG or PNG. Choose as many as you like; captions and dates can be added afterwards.</p>
       <p role="status" className="sr-only">{progress ? `Uploading photograph ${progress.done + 1} of ${progress.total}` : ""}</p>
       {problems.length > 0 && (
         <ul role="alert" className="mt-3 space-y-1 text-sm text-[#8f3b2f]">

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { CSSProperties, ReactNode } from "react";
 import { fontVariables } from "@/app/fonts";
 import "@/app/globals.css";
+import { BackToTop } from "@/components/site/BackToTop";
 import { Providers } from "@/components/site/Providers";
 import { shareCopy } from "@/components/site/Footer";
 import { lifespan, siteUrl } from "@/lib/format";
@@ -17,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
     `${memorial.epitaph} · ${lifespan(memorial.born_on, memorial.died_on)}. ${memorial.story_intro}`.slice(0, 200);
   return {
     metadataBase: new URL(siteUrl()),
-    title: { default: share.title, template: `%s — ${memorial.full_name}` },
+    title: { default: share.title, template: `%s · ${memorial.full_name}` },
     description,
     openGraph: {
       type: "website",
@@ -49,6 +50,7 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
           Skip to content
         </a>
         <Providers shortName={memorial.short_name}>{children}</Providers>
+        <BackToTop />
       </body>
     </html>
   );

@@ -29,7 +29,7 @@ export default async function FamilyPage() {
   const next = members.length ? Math.max(...members.map((m) => m.sort_order)) + 1 : 0;
 
   return (
-    <AdminPage title="Family" intro="Those who are named under “Survived by”. This section is optional — switch it off in Settings if you prefer.">
+    <AdminPage title="Family" intro="Those who are named under “Survived by”. This section is optional; switch it off in Settings if you prefer.">
       <Panel title="Add a family member">
         <ActionForm action={saveFamilyMember} submit="Add" resetOnSuccess>
           <input type="hidden" name="sort_order" value={next} />

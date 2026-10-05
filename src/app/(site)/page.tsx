@@ -69,7 +69,7 @@ export default async function Home() {
                 </TributeButton>
               }
             >
-              <p>The small things — a habit, a phrase, a laugh. Add yours to the wall.</p>
+              <p>The small things: a habit, a phrase, a laugh. Add yours to the wall.</p>
             </SectionHeader>
             {data.memories.length > 0 && <MemoryWall memories={data.memories} />}
           </div>
@@ -84,9 +84,9 @@ export default async function Home() {
           <section id="gallery" className="section border-t border-line" aria-label="Photographs">
             <div className="shell">
               <SectionHeader number={number} eyebrow="Photographs" title={<>An album of {accent("moments")}</>}>
-                <p>Select any photograph to see it in full.</p>
+                <p>A few photographs from the album. Select any one to see it in full.</p>
               </SectionHeader>
-              <Gallery images={data.gallery} />
+              <Gallery images={data.gallery} preview={9} />
               <Reveal className="no-print mt-12 flex flex-col items-center gap-6 text-center lg:mt-20">
                 <p className="max-w-md font-serif text-2xl italic text-ink-soft">
                   Do you have a photograph or a story that belongs here?

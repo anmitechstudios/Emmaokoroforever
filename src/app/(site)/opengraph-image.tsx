@@ -45,7 +45,7 @@ export default async function OpenGraphImage() {
             <div style={{ display: "flex", fontFamily: "Cormorant Italic", color: accent }}>{family}</div>
           </div>
           <div style={{ display: "flex", marginTop: 40, fontSize: 25, letterSpacing: 3, textTransform: "uppercase", color: "#4a453e" }}>
-            {longDate(memorial.born_on)} — {longDate(memorial.died_on)}
+            {longDate(memorial.born_on)} – {longDate(memorial.died_on)}
           </div>
         </div>
         {portrait && (

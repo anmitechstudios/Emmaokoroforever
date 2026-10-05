@@ -40,7 +40,7 @@ export default async function Privacy() {
         <section>
           <h2>Your email address</h2>
           <p>
-            Email is always optional. If you give it, only the family can see it — it is never displayed on the
+            Email is always optional. If you give it, only the family can see it. It is never displayed on the
             memorial, never shared, and never added to a mailing list.
           </p>
         </section>
@@ -48,7 +48,7 @@ export default async function Privacy() {
           <h2>What appears, and when</h2>
           <p>
             Tributes appear on the memorial as soon as they are sent. Memories and names added to candles are read by a
-            member of the family first. The family can remove anything, and visitors can report a tribute — one that is
+            member of the family first. The family can remove anything, and visitors can report a tribute. One that is
             reported several times is hidden until the family has looked at it again.
           </p>
         </section>
