@@ -35,6 +35,7 @@ export function Tributes({ initial, total: initialTotal }: { initial: PublicTrib
   const request = useRef(0);
   const track = useRef<HTMLDivElement>(null);
   const [edges, setEdges] = useState({ start: true, end: true });
+  const [viewing, setViewing] = useState<PublicTribute | null>(null);
   const [position, setPosition] = useState(1);
 
   // Fresh data from the server (after a revalidation) replaces the first page.
@@ -206,6 +207,7 @@ export function Tributes({ initial, total: initialTotal }: { initial: PublicTrib
                   hearted={hearts.includes(tribute.id)}
                   onHeart={() => heart(tribute)}
                   onReport={() => setReporting(tribute)}
+                  onView={() => setViewing(tribute)}
                 />
               </div>
             ))}
@@ -248,6 +250,7 @@ export function Tributes({ initial, total: initialTotal }: { initial: PublicTrib
       )}
 
       <ReportDialog tribute={reporting} onClose={() => setReporting(null)} />
+      <PhotoViewer tribute={viewing} onClose={() => setViewing(null)} />
     </>
   );
 }
@@ -258,12 +261,14 @@ function TributeCard({
   hearted,
   onHeart,
   onReport,
+  onView,
 }: {
   tribute: PublicTribute;
   pending: boolean;
   hearted: boolean;
   onHeart: () => void;
   onReport: () => void;
+  onView: () => void;
 }) {
   const long = tribute.message.length > 240;
   const [expanded, setExpanded] = useState(false);
@@ -294,9 +299,22 @@ function TributeCard({
         </p>
       )}
       {tribute.photo_url && (
-        <div className="relative mb-7 aspect-[4/3] overflow-hidden rounded-[2px] bg-line/40">
-          <Image src={tribute.photo_url} alt={`Photograph shared by ${tribute.name}`} fill sizes="(min-width: 768px) 40vw, 90vw" className="object-cover" />
-        </div>
+        <button
+          type="button"
+          onClick={onView}
+          className="group relative mb-7 block w-full cursor-zoom-in overflow-hidden rounded-[2px] bg-line/40"
+          aria-label={`Open the photograph shared by ${tribute.name}`}
+        >
+          {/* The stated size is only a placeholder shape; once loaded, the photograph keeps its own proportions. */}
+          <Image
+            src={tribute.photo_url}
+            alt={`Photograph shared by ${tribute.name}`}
+            width={800}
+            height={600}
+            sizes="(min-width: 1024px) 26rem, (min-width: 640px) 45vw, 86vw"
+            className="h-auto max-h-80 w-full object-cover object-top transition-transform duration-[1400ms] ease-calm group-hover:scale-[1.03]"
+          />
+        </button>
       )}
       <span className="block h-7 font-serif text-6xl leading-none text-accent" aria-hidden="true">
         “
@@ -429,5 +447,45 @@ function ReportDialog({ tribute, onClose }: { tribute: PublicTribute | null; onC
         )}
       </div>
     </Modal>
+  );
+}
+
+/** The photograph attached to a tribute, shown whole and as large as the screen allows. */
+function PhotoViewer({ tribute, onClose }: { tribute: PublicTribute | null; onClose: () => void }) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const open = tribute !== null;
+
+  useEffect(() => {
+    const el = dialog.current;
+    if (!el) return;
+    if (open && !el.open) el.showModal();
+    if (!open && el.open) el.close();
+  }, [open]);
+
+  return (
+    <dialog ref={dialog} className="sheet sheet-full" aria-label="Photograph" onClose={onClose}>
+      {tribute && (
+        <div className="flex h-full flex-col text-night-ink">
+          <div className="flex shrink-0 justify-end px-4 py-3 sm:px-8 sm:py-5">
+            <button
+              type="button"
+              autoFocus
+              onClick={onClose}
+              className="grid size-11 place-items-center rounded-full text-night-ink/70 transition-colors hover:text-white"
+              aria-label="Close photograph"
+            >
+              <Icon name="close" size={22} />
+            </button>
+          </div>
+          {/* Clicking the dark area around the photograph closes it too. */}
+          <div className="relative min-h-0 flex-1 cursor-zoom-out px-4 sm:px-16" onClick={onClose}>
+            <div className="relative h-full w-full">
+              <Image src={tribute.photo_url} alt={`Photograph shared by ${tribute.name}`} fill sizes="100vw" quality={85} className="object-contain" />
+            </div>
+          </div>
+          <p className="shrink-0 px-6 pb-8 pt-5 text-center font-serif text-xl italic sm:pb-10">Shared by {tribute.name}</p>
+        </div>
+      )}
+    </dialog>
   );
 }

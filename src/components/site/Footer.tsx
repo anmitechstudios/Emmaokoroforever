@@ -90,7 +90,12 @@ export function Footer({ memorial }: { memorial: Memorial }) {
             Family sign-in
           </Link>
         </p>
-        <p className="mt-3 text-xs text-muted">Site by Michael Osayame-Ebohon</p>
+        <p className="mt-3 text-xs text-muted">
+          Site by{" "}
+          <a href="tel:+2349084760409" className="underline decoration-muted/60 underline-offset-4 transition-colors duration-300 hover:text-ink hover:decoration-ink" aria-label="Call Michael Osayame-Ebohon on 0908 476 0409">
+            Michael Osayame-Ebohon
+          </a>
+        </p>
       </div>
     </footer>
   );

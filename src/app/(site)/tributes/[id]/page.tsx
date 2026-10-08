@@ -43,9 +43,24 @@ export default async function TributePage({ params }: Props) {
           {memorial.epitaph} · {memorial.full_name} · {lifespan(memorial.born_on, memorial.died_on)}
         </p>
         {tribute.photo_url && (
-          <div className="rise relative mt-12 aspect-[4/3] w-full max-w-xl overflow-hidden rounded-[2px]" style={{ ["--delay" as string]: "0.1s" }}>
-            <Image src={tribute.photo_url} alt={`Photograph shared by ${tribute.name}`} fill sizes="(min-width: 640px) 36rem, 92vw" className="object-cover" priority />
-          </div>
+          <a
+            href={tribute.photo_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rise mt-12 block w-full max-w-xl cursor-zoom-in overflow-hidden rounded-[2px]"
+            style={{ ["--delay" as string]: "0.1s" }}
+            aria-label={`Open the photograph shared by ${tribute.name} at full size`}
+          >
+            <Image
+              src={tribute.photo_url}
+              alt={`Photograph shared by ${tribute.name}`}
+              width={1200}
+              height={900}
+              sizes="(min-width: 640px) 36rem, 92vw"
+              className="h-auto max-h-[70vh] w-full object-contain"
+              priority
+            />
+          </a>
         )}
         <span className="rise mt-12 block h-10 font-serif text-8xl leading-none text-accent" aria-hidden="true" style={{ ["--delay" as string]: "0.15s" }}>
           “
