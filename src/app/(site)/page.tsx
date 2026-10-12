@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Candle } from "@/components/site/Candle";
 import { Family } from "@/components/site/Family";
-import { Favorites } from "@/components/site/Favorites";
+// import { Favorites } from "@/components/site/Favorites";
 import { Closing, Footer } from "@/components/site/Footer";
 import { Gallery } from "@/components/site/Gallery";
 // import { Guestbook } from "@/components/site/Guestbook";
@@ -97,18 +97,19 @@ export default async function Home() {
           </section>
         ),
     },
-    {
-      key: "favorites",
-      render: (number) =>
-        memorial.favorites.length > 0 && (
-          <section id="favourites" className="section border-y border-line bg-surface" aria-label="Favourite things">
-            <div className="shell">
-              <SectionHeader number={number} eyebrow="Favourite Things" title={<>The things {name} {accent("loved")}</>} />
-              <Favorites favorites={memorial.favorites} />
-            </div>
-          </section>
-        ),
-    },
+    // Favourite things — commented out until there are more to show. Restore this block and its import above to bring it back.
+    // {
+    //   key: "favorites",
+    //   render: (number) =>
+    //     memorial.favorites.length > 0 && (
+    //       <section id="favourites" className="section border-y border-line bg-surface" aria-label="Favourite things">
+    //         <div className="shell">
+    //           <SectionHeader number={number} eyebrow="Favourite Things" title={<>The things {name} {accent("loved")}</>} />
+    //           <Favorites favorites={memorial.favorites} />
+    //         </div>
+    //       </section>
+    //     ),
+    // },
     // Recordings ("Voice & film") — commented out for now. Restore this block and
     // the Media import above to bring the section back.
     // {
