@@ -45,10 +45,12 @@ export function Closing({ memorial }: { memorial: Memorial }) {
               <Icon name="share" size={15} />
               Share this memorial
             </ShareButton>
+            {/* Memorial booklet download — commented out for now. The booklet itself still exists at /memorial.pdf.
             <a href="/memorial.pdf" className="link-line" download>
               <Icon name="download" size={15} />
               Memorial booklet (PDF)
             </a>
+            */}
             <PrintButton>
               <Icon name="print" size={15} />
               Print this page
