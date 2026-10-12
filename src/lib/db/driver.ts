@@ -1,4 +1,4 @@
-import type { Rows, Table } from "./types";
+import type { Rows, Table, VisitStats } from "./types";
 
 type Scalar = string | number | boolean;
 
@@ -28,6 +28,8 @@ export interface Driver {
   remove(table: Table, id: string): Promise<void>;
   /** Atomically adds `by` to tributes.likes (never below zero) and returns the new total. */
   adjustLikes(id: string, by: number): Promise<number>;
+  /** Visit totals for the dashboard, worked out inside the database. */
+  visitStats(memorialId: string): Promise<VisitStats>;
 }
 
 /** Strips characters that have meaning in search filters, leaving plain words. */

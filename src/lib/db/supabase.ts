@@ -77,4 +77,9 @@ export const supabaseDriver: Driver = {
     if (error) fail("update", error);
     return Number(data ?? 0);
   },
+  async visitStats(memorialId) {
+    const { data, error } = await supabase().rpc("visit_stats", { p_memorial: memorialId });
+    if (error) fail("read", error);
+    return data;
+  },
 };

@@ -4,6 +4,7 @@ import { fontVariables } from "@/app/fonts";
 import "@/app/globals.css";
 import { BackToTop } from "@/components/site/BackToTop";
 import { Providers } from "@/components/site/Providers";
+import { VisitBeacon } from "@/components/site/VisitBeacon";
 import { shareCopy } from "@/components/site/Footer";
 import { lifespan, siteUrl } from "@/lib/format";
 import { getMemorial } from "@/lib/queries";
@@ -51,6 +52,7 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
         </a>
         <Providers shortName={memorial.short_name}>{children}</Providers>
         <BackToTop />
+        <VisitBeacon />
       </body>
     </html>
   );

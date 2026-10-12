@@ -57,7 +57,8 @@ export default async function Privacy() {
           <p>
             Your browser remembers which tributes you have sent a heart to and whether you have lit a candle, so the
             page can show that when you return. This stays on your device. We also keep a one-way, anonymised
-            fingerprint of your network address for a short time, solely to prevent spam.
+            fingerprint of your network address, solely to prevent spam and to count how many people have visited. No
+            advertising or tracking service is used.
           </p>
         </section>
         <section id="contact" className="scroll-mt-24">

@@ -231,6 +231,29 @@ export interface Report {
   created_at: string;
 }
 
+/** One page view. No name, no IP address: only a one-way fingerprint, to count distinct visitors. */
+export interface Visit {
+  id: string;
+  memorial_id: string;
+  path: string;
+  visitor_hash: string;
+  created_at: string;
+}
+
+export interface VisitStats {
+  total: number;
+  visitors: number;
+  today: number;
+  week: number;
+  month: number;
+  /** The last 30 days, oldest first. */
+  days: { day: string; visits: number }[];
+  pages: { path: string; visits: number }[];
+}
+
+/** Days are counted in the family's own time zone. */
+export const VISIT_TIME_ZONE = "Africa/Lagos";
+
 export const TABLES = [
   "memorials",
   "timeline_events",
@@ -244,6 +267,7 @@ export const TABLES = [
   "media",
   "admin_users",
   "reports",
+  "visits",
 ] as const;
 export type Table = (typeof TABLES)[number];
 
@@ -260,6 +284,7 @@ export interface Rows {
   media: MediaItem;
   admin_users: AdminUser;
   reports: Report;
+  visits: Visit;
 }
 
 /** What visitors are allowed to see of a tribute — never the email or address hash. */

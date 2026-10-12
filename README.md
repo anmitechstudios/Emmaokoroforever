@@ -21,7 +21,7 @@ Everything on the public page is edited from `/admin`:
 
 | Dashboard page | Controls |
 | --- | --- |
-| Overview | What is waiting for review |
+| Overview | What is waiting for review, and how many people have visited |
 | Tributes · Memories · Guestbook · Candles | Approve, reject, edit, delete, search, filter by status |
 | Name & portrait | Name, dates, portrait, quote, introduction, closing message |
 | Life story | Chapters with photographs and pull quotes, re-orderable |

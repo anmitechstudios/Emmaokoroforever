@@ -15,6 +15,13 @@ export async function visitorHash(): Promise<string> {
   return createHmac("sha256", secret()).update(`visitor:${ip}`).digest("base64url").slice(0, 24);
 }
 
+/** As above, but also told apart by browser, so two people on one network count as two visitors. */
+export async function visitorFingerprint(): Promise<string> {
+  const h = await headers();
+  const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "unknown";
+  return createHmac("sha256", secret()).update(`visit:${ip}|${h.get("user-agent") ?? ""}`).digest("base64url").slice(0, 24);
+}
+
 const buckets = (globalThis as unknown as { __memorialBuckets?: Map<string, number[]> }).__memorialBuckets ??= new Map();
 
 /** In-memory sliding window — for cheap, frequent actions (likes, sign-in attempts). */

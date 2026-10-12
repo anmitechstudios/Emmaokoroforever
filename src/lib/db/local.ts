@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync, renameSync, statSync, writeFileSync } from "no
 import path from "node:path";
 import type { Driver, Query } from "./driver";
 import { cleanSearchTerm } from "./driver";
-import { TABLES, type Rows, type Table } from "./types";
+import { TABLES, VISIT_TIME_ZONE, type Rows, type Table } from "./types";
 
 // A small JSON-file database for local development and previews. It keeps the
 // whole dataset in memory, writes through on every change, and re-reads when
@@ -125,5 +125,22 @@ export const localDriver: Driver = {
     row.likes = Math.max(0, row.likes + by);
     persist(data);
     return row.likes;
+  },
+  async visitStats(memorialId) {
+    const dayOf = new Intl.DateTimeFormat("en-CA", { timeZone: VISIT_TIME_ZONE });
+    const rows = load().visits.filter((v) => v.memorial_id === memorialId).map((v) => ({ ...v, day: dayOf.format(new Date(v.created_at)) }));
+    const days = Array.from({ length: 30 }, (_, i) => dayOf.format(new Date(Date.now() - (29 - i) * 86_400_000)));
+    const since = (n: number) => rows.filter((r) => r.day >= days[30 - n]).length;
+    const byPath = new Map<string, number>();
+    for (const r of rows) byPath.set(r.path, (byPath.get(r.path) ?? 0) + 1);
+    return {
+      total: rows.length,
+      visitors: new Set(rows.map((r) => r.visitor_hash)).size,
+      today: since(1),
+      week: since(7),
+      month: since(30),
+      days: days.map((day) => ({ day, visits: rows.filter((r) => r.day === day).length })),
+      pages: [...byPath].map(([path, visits]) => ({ path, visits })).sort((a, b) => b.visits - a.visits).slice(0, 8),
+    };
   },
 };

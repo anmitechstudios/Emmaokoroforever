@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AdminPage, Panel } from "@/components/admin/Shell";
+import { VisitsPanel } from "@/components/admin/Visits";
 import { Icon } from "@/components/ui/Icon";
 import { db, usingSupabase } from "@/lib/db";
 import { longDate } from "@/lib/format";
@@ -24,6 +25,9 @@ export default async function Overview() {
       store.count("gallery_images", { where: mine }),
       store.list("tributes", { where: pending, order: [{ column: "created_at", ascending: false }], limit: 3 }),
     ]);
+
+  // Null until the visits table exists (supabase/add-visits.sql).
+  const visits = await store.visitStats(memorial.id).catch(() => null);
 
   const queue = [
     { href: "/admin/tributes?status=pending", label: "Reported tributes", count: tributesWaiting },
@@ -67,6 +71,8 @@ export default async function Overview() {
           </ul>
         )}
       </Panel>
+
+      <VisitsPanel stats={visits} />
 
       <Panel title="On the memorial">
         <dl className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-5">
