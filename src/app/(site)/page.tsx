@@ -55,23 +55,20 @@ export default async function Home() {
     //     ),
     // },
     {
-      key: "memories",
+      key: "tributes",
+      nav: "Tributes",
       render: (number) => (
-        <section id="memories" className="section" aria-label="Shared memories">
-          <div className="shell">
+        <section id="tributes" className="section border-t border-line" aria-label="Tributes and condolences">
+          <div className="shell max-w-[76rem]">
             <SectionHeader
               number={number}
-              eyebrow="Memories"
-              title={<>What's one thing you'll always {accent("remember?")}</>}
-              action={
-                <TributeButton mode="memory" className="btn btn-outline">
-                  Share a Memory
-                </TributeButton>
-              }
+              eyebrow="Tributes & Condolences"
+              title={<>Words of {accent("love")}</>}
+              action={<TributeButton>Leave a Tribute</TributeButton>}
             >
-              <p>The small things: a habit, a phrase, a laugh. Add yours to the wall.</p>
+              <p>Share a memory, a message, a prayer, or words of comfort.</p>
             </SectionHeader>
-            {data.memories.length > 0 && <MemoryWall memories={data.memories} />}
+            <Tributes initial={data.tributes.tributes} total={data.tributes.total} />
           </div>
         </section>
       ),
@@ -125,20 +122,23 @@ export default async function Home() {
     //     ),
     // },
     {
-      key: "tributes",
-      nav: "Tributes",
+      key: "memories",
       render: (number) => (
-        <section id="tributes" className="section border-y border-line bg-surface" aria-label="Tributes and condolences">
-          <div className="shell max-w-[76rem]">
+        <section id="memories" className="section border-y border-line bg-surface" aria-label="Shared memories">
+          <div className="shell">
             <SectionHeader
               number={number}
-              eyebrow="Tributes & Condolences"
-              title={<>Words of {accent("love")}</>}
-              action={<TributeButton>Leave a Tribute</TributeButton>}
+              eyebrow="Memories"
+              title={<>What's one thing you'll always {accent("remember?")}</>}
+              action={
+                <TributeButton mode="memory" className="btn btn-outline">
+                  Share a Memory
+                </TributeButton>
+              }
             >
-              <p>Share a memory, a message, a prayer, or words of comfort.</p>
+              <p>The small things: a habit, a phrase, a laugh. Add yours to the wall.</p>
             </SectionHeader>
-            <Tributes initial={data.tributes.tributes} total={data.tributes.total} />
+            {data.memories.length > 0 && <MemoryWall memories={data.memories} />}
           </div>
         </section>
       ),
