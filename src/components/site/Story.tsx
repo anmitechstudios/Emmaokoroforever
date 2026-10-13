@@ -85,9 +85,7 @@ export function Story({ memorial, number }: { memorial: Memorial; number: string
           <p className="max-w-md font-serif text-2xl italic text-ink-soft">
             Every life is remembered in pieces. Which piece do you carry?
           </p>
-          <TributeButton mode="memory" className="btn btn-outline">
-            Share a Memory
-          </TributeButton>
+          <TributeButton className="btn btn-outline">Leave a Tribute</TributeButton>
         </Reveal>
       </div>
     </section>
