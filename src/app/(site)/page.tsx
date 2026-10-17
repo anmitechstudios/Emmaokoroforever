@@ -23,6 +23,14 @@ import { getHome } from "@/lib/queries";
 // approvals revalidate it immediately.
 export const revalidate = 300;
 
+// The family's printed funeral programme (public/funeral-programme.jpg). Remove the prop below to hide it.
+const PROGRAMME = {
+  src: "/funeral-programme.jpg",
+  width: 1024,
+  height: 1536,
+  alt: "The funeral programme for Mazi Emmanuel Uvere Okoro, listing the Service of Songs, Night Vigil, Morning Programme, Burial Service, Interment, Reception and Thanksgiving Service.",
+};
+
 const accent = (text: string) => <em className="text-accent">{text}</em>;
 
 export default async function Home() {
@@ -157,14 +165,14 @@ export default async function Home() {
     },
     {
       key: "service",
-      nav: "Service",
+      nav: "Arrangements",
       render: (number) =>
         service &&
-        (service.date || service.venue) && (
-          <section id="service" className="section border-y border-line bg-surface" aria-label="Service information">
+        (service.schedule.length > 0 || service.date || service.venue) && (
+          <section id="service" className="section border-y border-line bg-surface" aria-label="Funeral arrangements">
             <div className="shell">
-              <SectionHeader number={number} eyebrow="The Service" title={<>Join us in {accent("remembrance")}</>} />
-              <Service service={service} />
+              <SectionHeader number={number} eyebrow="Funeral Arrangements" title={<>Join us in {accent("remembrance")}</>} />
+              <Service service={service} programme={PROGRAMME} />
             </div>
           </section>
         ),

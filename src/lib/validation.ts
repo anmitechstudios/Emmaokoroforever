@@ -88,9 +88,12 @@ export const favoriteSchema = z.object({
 
 export const scheduleSchema = z.object({
   id: z.string().max(64),
+  date: z.preprocess((v) => v ?? "", z.union([z.literal(""), z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Please choose a date.")])),
   time: line(40),
   title: line(120),
-  note: line(200),
+  venue: z.preprocess((v) => v ?? "", text(300)),
+  map_query: z.preprocess((v) => v ?? "", line(300)),
+  note: line(300),
 });
 
 export const timelineSchema = z.object({

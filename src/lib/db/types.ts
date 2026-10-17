@@ -168,10 +168,17 @@ export interface FamilyMember {
   sort_order: number;
 }
 
+/** One part of the funeral arrangements: a service, vigil, interment, reception… */
 export interface ScheduleItem {
   id: string;
+  /** ISO day. Empty means the main date of the arrangements. */
+  date: string;
   time: string;
   title: string;
+  /** Where it happens, written as it should read (it may run to two lines). */
+  venue: string;
+  /** What to search for in Google Maps for "Directions". Empty hides the link. */
+  map_query: string;
   note: string;
 }
 

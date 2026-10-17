@@ -91,16 +91,16 @@ const family: FamilyMember[] = biography.family.map(([name, family_group, note],
 const service: ServiceInfo = {
   id: sid("service"),
   memorial_id: MEMORIAL_ID,
-  title: "Funeral Service",
-  date: "2026-11-06",
+  title: biography.arrangements.title,
+  date: biography.arrangements.date,
   time: "",
-  venue: "To be announced",
+  venue: "",
   address: "",
   map_query: "",
   livestream_url: "",
   dress_code: "",
-  notes: "Further details will be shared here as soon as arrangements are confirmed.",
-  schedule: [],
+  notes: biography.arrangements.notes,
+  schedule: biography.arrangements.events.map(({ key, ...event }) => ({ id: sid(`event-${key}`), ...event })),
 };
 
 export async function seed(db: Driver): Promise<void> {

@@ -22,6 +22,12 @@ export function fullDate(iso: string): string {
   return `${DAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]}, ${longDate(iso)}`;
 }
 
+/** { weekday: "Saturday", dayMonth: "31 October", year: "2026" } */
+export function dayParts(iso: string) {
+  const { y, m, d } = parts(iso);
+  return { weekday: DAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()], dayMonth: `${d} ${MONTHS[m - 1]}`, year: String(y) };
+}
+
 export function year(iso: string): string {
   return iso.slice(0, 4);
 }

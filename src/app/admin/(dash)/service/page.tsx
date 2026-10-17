@@ -6,48 +6,55 @@ import { saveService } from "@/lib/actions/admin";
 import { db } from "@/lib/db";
 import { getMemorial } from "@/lib/queries";
 
-export const metadata: Metadata = { title: "Service" };
+export const metadata: Metadata = { title: "Funeral arrangements" };
 
 export default async function ServicePage() {
   const memorial = await getMemorial();
   const [service] = await (await db()).list("service_info", { where: { memorial_id: memorial.id }, limit: 1 });
 
   return (
-    <AdminPage title="Service" intro="Funeral or thanksgiving service details. Leave the date and venue empty to hide this section.">
+    <AdminPage
+      title="Funeral arrangements"
+      intro="Each service, vigil, burial, reception or thanksgiving is one event. Events are grouped by day on the memorial, in date order. Remove them all to hide this section."
+    >
       <ActionForm action={saveService} className="space-y-8">
-        <Panel title="When and where">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Input label="Name of the service" name="title" defaultValue={service?.title} maxLength={120} placeholder="A Service of Thanksgiving" className="sm:col-span-2" />
-            <Input label="Date" name="date" type="date" defaultValue={service?.date} />
-            <Input label="Time" name="time" defaultValue={service?.time} maxLength={60} placeholder="10:00 am" />
-            <Input label="Venue" name="venue" defaultValue={service?.venue} maxLength={160} />
-            <Input label="Address" name="address" defaultValue={service?.address} maxLength={300} />
-            <Input
-              label="Map search"
-              name="map_query"
-              defaultValue={service?.map_query}
-              maxLength={300}
-              hint="What you would type into Google Maps to find the venue. Used for the map and “Get Directions”."
-              className="sm:col-span-2"
-            />
-            <Input label="Livestream link" name="livestream_url" type="url" defaultValue={service?.livestream_url} placeholder="https://…" className="sm:col-span-2" />
-            <Input label="Dress code" name="dress_code" defaultValue={service?.dress_code} maxLength={300} className="sm:col-span-2" />
-            <Area label="A note for guests" name="notes" defaultValue={service?.notes} maxLength={800} className="sm:col-span-2" />
-          </div>
-        </Panel>
+        {/* Fields from the older single-service layout, kept as they are. */}
+        <input type="hidden" name="title" value={service?.title ?? "Funeral Arrangements"} />
+        <input type="hidden" name="date" value={service?.date ?? ""} />
+        <input type="hidden" name="time" value={service?.time ?? ""} />
+        <input type="hidden" name="venue" value={service?.venue ?? ""} />
+        <input type="hidden" name="address" value={service?.address ?? ""} />
+        <input type="hidden" name="map_query" value={service?.map_query ?? ""} />
 
-        <Panel title="Order of the day">
+        <Panel title="Events">
           <Repeater
             name="schedule"
-            itemLabel="Item"
-            addLabel="Add to the schedule"
-            initial={(service?.schedule ?? []) as never}
+            itemLabel="Event"
+            addLabel="Add an event"
+            initial={(service?.schedule ?? []).map((e) => ({ ...e, date: e.date ?? "", venue: e.venue ?? "", map_query: e.map_query ?? "" })) as never}
             fields={[
-              { key: "time", label: "Time", placeholder: "10:00 am" },
-              { key: "title", label: "What", placeholder: "Service of Thanksgiving" },
-              { key: "note", label: "Note (optional)", wide: true },
+              { key: "title", label: "What", placeholder: "Burial Service" },
+              { key: "date", label: "Date", type: "date" },
+              { key: "time", label: "Time", placeholder: "11:00am, or 3:00pm to 5:00pm" },
+              { key: "venue", label: "Where", type: "textarea", rows: 2, placeholder: "Venue name and address" },
+              {
+                key: "map_query",
+                label: "Map search (optional)",
+                wide: true,
+                placeholder: "Hugh Goldie Theological College, Arochukwu",
+                hint: "What to type into Google Maps to find the place. Adds a “Directions” link. Leave empty for a private home.",
+              },
+              { key: "note", label: "Note (optional)", wide: true, placeholder: "Hosted by …, or Follows immediately" },
             ]}
           />
+        </Panel>
+
+        <Panel title="For everyone attending">
+          <div className="grid gap-4">
+            <Area label="A note above the arrangements (optional)" name="notes" defaultValue={service?.notes} maxLength={800} rows={2} />
+            <Input label="Dress code (optional)" name="dress_code" defaultValue={service?.dress_code} maxLength={300} />
+            <Input label="Livestream link (optional)" name="livestream_url" type="url" defaultValue={service?.livestream_url} placeholder="https://…" />
+          </div>
         </Panel>
       </ActionForm>
     </AdminPage>

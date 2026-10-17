@@ -108,5 +108,84 @@
       "predeceased",
       "His father · of Ndi Owu Compound, Ibom Village, Arochukwu"
     ]
-  ]
+  ],
+  "arrangements": {
+    "title": "Funeral Arrangements",
+    "date": "2026-11-06",
+    "notes": "",
+    "events": [
+      {
+        "key": "songs",
+        "date": "2026-10-31",
+        "time": "3:00pm to 5:00pm",
+        "title": "Service of Songs",
+        "venue": "The Car Park / Sports Field, Northern Foreshore Estate,\nChevron Drive, Lekki, Lagos",
+        "map_query": "Northern Foreshore Estate, Chevron Drive, Lekki, Lagos",
+        "note": "Hosted by St. James the Great Anglican Church, Lekki, Lagos."
+      },
+      {
+        "key": "vigil",
+        "date": "2026-11-05",
+        "time": "5:00pm to 6:30pm",
+        "title": "Night Vigil",
+        "venue": "At his family home, Barracks Layout,\nIbom Village, Arochukwu",
+        "map_query": "",
+        "note": ""
+      },
+      {
+        "key": "morning",
+        "date": "2026-11-06",
+        "time": "7:00am",
+        "title": "Morning Programme",
+        "venue": "",
+        "map_query": "",
+        "note": "Body leaves Aro Mortuary for his home town, Ibom in Arochukwu."
+      },
+      {
+        "key": "lying-in-state",
+        "date": "2026-11-06",
+        "time": "9:00am",
+        "title": "Lying in State",
+        "venue": "At his family home, Barracks Layout,\nIbom Village, Arochukwu",
+        "map_query": "",
+        "note": ""
+      },
+      {
+        "key": "burial",
+        "date": "2026-11-06",
+        "time": "11:00am",
+        "title": "Burial Service",
+        "venue": "Chapel of Hugh Goldie Theological College,\noff Dr Nkemka Jumbo-Offor Road, Ibom, Arochukwu",
+        "map_query": "Hugh Goldie Theological College, Arochukwu",
+        "note": ""
+      },
+      {
+        "key": "interment",
+        "date": "2026-11-06",
+        "time": "",
+        "title": "Interment",
+        "venue": "At his family home, Barracks Layout,\nIbom Village, Arochukwu",
+        "map_query": "",
+        "note": ""
+      },
+      {
+        "key": "reception",
+        "date": "2026-11-06",
+        "time": "",
+        "title": "Reception",
+        "venue": "The football field adjacent to the Chapel of Hugh Goldie",
+        "map_query": "Hugh Goldie Theological College, Arochukwu",
+        "note": "Follows immediately."
+      },
+      {
+        "key": "thanksgiving",
+        "date": "2026-11-08",
+        "time": "9:00am",
+        "title": "Thanksgiving Service",
+        "venue": "St. Philip's Anglican Church, New Market Road,\nIbom Village, Arochukwu",
+        "map_query": "St. Philip's Anglican Church, Ibom, Arochukwu",
+        "note": ""
+      }
+    ]
+  }
 }

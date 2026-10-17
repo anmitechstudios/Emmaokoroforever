@@ -1,104 +1,114 @@
+import Image from "next/image";
 import type { ServiceInfo } from "@/lib/db/types";
-import { fullDate } from "@/lib/format";
+import { arrangementDays, directionsUrl } from "@/lib/arrangements";
+import { dayParts } from "@/lib/format";
 import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/motion";
 
-export function Service({ service }: { service: ServiceInfo }) {
-  // Only offer a map once there is a real address to find — not a placeholder venue such as "To be announced".
-  const place = service.map_query || (service.address ? [service.venue, service.address].filter(Boolean).join(", ") : "");
-  const directions = place ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(place)}` : null;
-  const map = place ? `https://www.google.com/maps?q=${encodeURIComponent(place)}&output=embed` : null;
+/** The family's printed programme, shown beside the arrangements. */
+export type Programme = { src: string; width: number; height: number; alt: string };
+
+/** The funeral arrangements, set out like a printed order of events: one row per day. */
+export function Service({ service, programme }: { service: ServiceInfo; programme?: Programme }) {
+  const days = arrangementDays(service);
 
   return (
-    <div className="mt-14 grid gap-12 lg:mt-20 lg:grid-cols-12 lg:gap-8">
-      <div className="lg:col-span-6">
+    <div className={`mt-14 lg:mt-20 ${programme ? "grid gap-14 lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-16 xl:grid-cols-[minmax(0,1fr)_20rem]" : ""}`}>
+    <div className="min-w-0">
+      {service.notes && (
         <Reveal>
-          {service.title && <p className="font-serif text-2xl italic text-accent">{service.title}</p>}
-          {service.date && (
-            <p className="mt-3 font-serif text-[clamp(2rem,4.2vw,3.5rem)] font-light leading-[1.05]">
-              <time dateTime={service.date}>{fullDate(service.date)}</time>
+          <p className="max-w-2xl font-serif text-xl italic leading-snug text-ink-soft">{service.notes}</p>
+        </Reveal>
+      )}
+
+      <ol className={`border-t border-line ${service.notes ? "mt-10" : ""}`}>
+        {days.map((day) => {
+          const when = day.date ? dayParts(day.date) : null;
+          return (
+            <Reveal as="li" key={day.date || "tbc"} className="grid gap-6 border-b border-line py-10 lg:grid-cols-[15rem_1fr] lg:gap-12 lg:py-14">
+              <div>
+                {when ? (
+                  <time dateTime={day.date} className="block">
+                    <span className="eyebrow block">{when.weekday}</span>
+                    <span className="mt-2 block font-serif text-4xl font-light leading-none lining-nums lg:text-5xl">{when.dayMonth}</span>
+                    <span className="mt-2 block text-[0.8125rem] tabular-nums tracking-wide text-muted">{when.year}</span>
+                  </time>
+                ) : (
+                  <span className="font-serif text-3xl font-light italic text-muted">Date to be confirmed</span>
+                )}
+              </div>
+
+              <ul className="space-y-9">
+                {day.events.map((event) => {
+                  const directions = directionsUrl(event.map_query);
+                  return (
+                    <li key={event.id} className="grid gap-x-6 gap-y-1 sm:grid-cols-[10.5rem_1fr]">
+                      <p className="pt-1.5 text-[0.8125rem] uppercase tabular-nums tracking-[0.12em] text-accent">{event.time}</p>
+                      <div>
+                        <h3 className="font-serif text-2xl leading-tight lg:text-[1.75rem]">{event.title}</h3>
+                        {event.venue && <p className="mt-2 whitespace-pre-line text-ink-soft">{event.venue}</p>}
+                        {event.note && <p className="mt-1.5 font-serif text-lg italic leading-snug text-muted">{event.note}</p>}
+                        {directions && (
+                          <a href={directions} target="_blank" rel="noopener noreferrer" className="link-line no-print mt-3 !text-[0.6875rem]">
+                            <Icon name="pin" size={14} />
+                            Directions
+                          </a>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </Reveal>
+          );
+        })}
+      </ol>
+
+      {(service.dress_code || service.livestream_url) && (
+        <Reveal className="mt-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          {service.dress_code && (
+            <p className="text-ink-soft">
+              <span className="eyebrow mr-3">Dress</span>
+              {service.dress_code}
             </p>
           )}
-        </Reveal>
-
-        <Reveal delay={0.1}>
-          <dl className="mt-10 grid gap-x-10 gap-y-7 border-t border-line pt-8 sm:grid-cols-2">
-            {service.time && (
-              <div>
-                <dt className="eyebrow">Time</dt>
-                <dd className="mt-2 font-serif text-2xl">{service.time}</dd>
-              </div>
-            )}
-            {service.venue && (
-              <div>
-                <dt className="eyebrow">Venue</dt>
-                <dd className="mt-2">
-                  <span className="font-serif text-2xl leading-tight">{service.venue}</span>
-                  {service.address && <span className="mt-1 block text-[0.9375rem] text-muted">{service.address}</span>}
-                </dd>
-              </div>
-            )}
-            {service.dress_code && (
-              <div className="sm:col-span-2">
-                <dt className="eyebrow">Dress</dt>
-                <dd className="mt-2 text-ink-soft">{service.dress_code}</dd>
-              </div>
-            )}
-          </dl>
-        </Reveal>
-
-        {service.schedule.length > 0 && (
-          <Reveal delay={0.15}>
-            <h3 className="eyebrow mt-12 !font-sans">Order of the day</h3>
-            <ol className="mt-4">
-              {service.schedule.map((item) => (
-                <li key={item.id} className="grid grid-cols-[6.5rem_1fr] gap-4 border-t border-line py-4 last:border-b">
-                  <span className="pt-1 text-[0.8125rem] tabular-nums tracking-wide text-muted">{item.time}</span>
-                  <span>
-                    <span className="block font-serif text-xl leading-snug">{item.title}</span>
-                    {item.note && <span className="block text-[0.875rem] text-muted">{item.note}</span>}
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </Reveal>
-        )}
-
-        {service.notes && (
-          <Reveal delay={0.2}>
-            <p className="mt-8 max-w-lg font-serif text-xl italic leading-snug text-ink-soft">{service.notes}</p>
-          </Reveal>
-        )}
-
-        <Reveal delay={0.25} className="no-print mt-10 flex flex-wrap gap-4">
-          {directions && (
-            <a href={directions} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-              <Icon name="pin" size={16} />
-              Get Directions
-            </a>
-          )}
           {service.livestream_url && (
-            <a href={service.livestream_url} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+            <a href={service.livestream_url} target="_blank" rel="noopener noreferrer" className="btn btn-outline no-print">
               <Icon name="video" size={16} />
               Watch Livestream
             </a>
           )}
         </Reveal>
-      </div>
-
-      {map && (
-        <Reveal delay={0.15} className="no-print lg:col-span-5 lg:col-start-8">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2px] bg-line/50 lg:sticky lg:top-28">
-            <iframe
-              src={map}
-              title={`Map showing ${service.venue || "the venue"}`}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="absolute inset-0 h-full w-full border-0 [filter:grayscale(1)_sepia(0.18)_contrast(0.92)]"
-            />
-          </div>
-        </Reveal>
       )}
+    </div>
+
+    {programme && (
+      <Reveal as="figure" className="no-print lg:sticky lg:top-28 lg:self-start">
+        <a
+          href={programme.src}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group block cursor-zoom-in overflow-hidden rounded-[2px] border border-line bg-paper shadow-soft"
+          aria-label="Open the funeral programme at full size"
+        >
+          <Image
+            src={programme.src}
+            alt={programme.alt}
+            width={programme.width}
+            height={programme.height}
+            sizes="(min-width: 1280px) 20rem, (min-width: 1024px) 17rem, (min-width: 640px) 24rem, 92vw"
+            className="mx-auto h-auto w-full max-w-sm transition-transform duration-[1400ms] ease-calm group-hover:scale-[1.02] lg:max-w-none"
+          />
+        </a>
+        <figcaption className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <span className="eyebrow">The funeral programme</span>
+          <a href={programme.src} download="Emmanuel-Uvere-Okoro-funeral-programme.jpg" className="link-line !text-[0.6875rem]">
+            <Icon name="download" size={14} />
+            Download
+          </a>
+        </figcaption>
+      </Reveal>
+    )}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import path from "node:path";
 import { Document, Font, Image, Page, StyleSheet, Text, View, renderToBuffer } from "@react-pdf/renderer";
 import sharp from "sharp";
 import { db } from "@/lib/db";
+import { arrangementDays } from "@/lib/arrangements";
 import { FAMILY_GROUPS } from "@/lib/db/types";
 import { fullDate, lifespan, longDate, paragraphs } from "@/lib/format";
 import { getHome } from "@/lib/queries";
@@ -73,6 +74,7 @@ export async function GET() {
     ...chapters.map((c) => jpeg(c.image_url, 1100, 800)),
   ]);
 
+  const arrangements = service ? arrangementDays(service) : [];
   const words = memorial.full_name.trim().split(/\s+/);
   const groups = FAMILY_GROUPS.map((g) => ({ ...g, members: family.filter((m) => m.family_group === g.key) })).filter((g) => g.members.length);
 
@@ -181,28 +183,27 @@ export async function GET() {
             </View>
           )}
 
-          {on.service && service && (service.date || service.venue) && (
+          {on.service && service && arrangements.length > 0 && (
             <View break={on.family && groups.length > 0}>
-              <Text style={s.eyebrow}>The Service</Text>
-              <Text style={[s.h2, { marginBottom: 8 }]}>{service.title || "Service"}</Text>
-              <Text style={{ fontSize: 18, fontStyle: "italic", color: accent }}>
-                {[service.date && fullDate(service.date), service.time].filter(Boolean).join(" · ")}
-              </Text>
-              <Text style={{ fontSize: 15, marginTop: 10 }}>{service.venue}</Text>
-              <Text style={{ color: MUTED, fontSize: 11.5 }}>{service.address}</Text>
-              {service.dress_code ? <Text style={{ color: SOFT, marginTop: 10 }}>Dress: {service.dress_code}</Text> : null}
-              <View style={{ marginTop: 16 }}>
-                {service.schedule.map((item) => (
-                  <View key={item.id} style={{ flexDirection: "row", borderTopWidth: 0.6, borderTopColor: LINE, paddingVertical: 7 }}>
-                    <Text style={{ width: 92, fontFamily: "Helvetica", fontSize: 8.5, color: MUTED, paddingTop: 3 }}>{item.time}</Text>
-                    <Text style={{ flex: 1, fontSize: 13.5 }}>
-                      {item.title}
-                      {item.note ? <Text style={{ color: MUTED, fontSize: 11.5 }}>   {item.note}</Text> : null}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-              {service.notes ? <Text style={{ fontStyle: "italic", color: SOFT, marginTop: 12 }}>{service.notes}</Text> : null}
+              <Text style={s.eyebrow}>Funeral Arrangements</Text>
+              <Text style={[s.h2, { marginBottom: 12 }]}>Join us in remembrance</Text>
+              {service.notes ? <Text style={{ fontStyle: "italic", color: SOFT, marginBottom: 12 }}>{service.notes}</Text> : null}
+              {arrangements.map((day) => (
+                <View key={day.date || "tbc"} wrap={false} style={{ borderTopWidth: 0.6, borderTopColor: LINE, paddingTop: 10, paddingBottom: 6 }}>
+                  <Text style={{ fontSize: 16, fontStyle: "italic", color: accent, marginBottom: 6 }}>{day.date ? fullDate(day.date) : "Date to be confirmed"}</Text>
+                  {day.events.map((event) => (
+                    <View key={event.id} style={{ flexDirection: "row", marginBottom: 7 }}>
+                      <Text style={{ width: 92, fontFamily: "Helvetica", fontSize: 8, color: MUTED, paddingTop: 3 }}>{event.time}</Text>
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontSize: 14, lineHeight: 1.2 }}>{event.title}</Text>
+                        {event.venue ? <Text style={{ fontSize: 11.5, color: SOFT, lineHeight: 1.3 }}>{event.venue.replace(/\n/g, ", ")}</Text> : null}
+                        {event.note ? <Text style={{ fontSize: 11, fontStyle: "italic", color: MUTED, lineHeight: 1.3 }}>{event.note}</Text> : null}
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              ))}
+              {service.dress_code ? <Text style={{ color: SOFT, marginTop: 8 }}>Dress: {service.dress_code}</Text> : null}
             </View>
           )}
         </Page>

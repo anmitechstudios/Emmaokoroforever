@@ -6,7 +6,7 @@ import { Icon } from "@/components/ui/Icon";
 export type RepeaterField = {
   key: string;
   label: string;
-  type?: "text" | "textarea" | "image";
+  type?: "text" | "textarea" | "image" | "date";
   placeholder?: string;
   rows?: number;
   wide?: boolean;
@@ -97,7 +97,7 @@ export function Repeater({
                         </div>
                       </div>
                     ) : (
-                      <input id={id} className="input" value={item[field.key] ?? ""} placeholder={field.placeholder} onChange={(e) => change(item.id, field.key, e.target.value)} />
+                      <input id={id} type={field.type === "date" ? "date" : "text"} className="input" value={item[field.key] ?? ""} placeholder={field.placeholder} onChange={(e) => change(item.id, field.key, e.target.value)} />
                     )}
                     {field.hint && <p className="mt-1 text-xs text-muted">{field.hint}</p>}
                   </div>
